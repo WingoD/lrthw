@@ -6,15 +6,15 @@ set :public_folder, "static"
 set :views, "views"
 
 get '/' do
-      return 'Hello world'
+  return 'Hello world'
 end
 
 get '/hello/' do
-      greeting = params[:greeting] || "Hi There"
-          erb :index, :locals => {'greeting' => greeting}
+  greeting = params[:greeting] || "Hi There"
+  erb :index, :locals => {'greeting' => greeting}
 end
 
 get '/goodbye/' do
-            erb :index, :locals => {'greeting' => "piss off"}
-            end
+  erb :index, :locals => {'greeting' => "piss off"}
+end
 
