@@ -1,0 +1,65 @@
+#!/usr/bin/env ruby
+
+class Room
+  attr_reader :description
+  def describe
+    puts @description
+  end
+
+  def game_ending?
+    return @game_ending
+  end
+
+  def move(direction)
+    raise "not yet implemented"
+  end
+end
+
+class Rooms
+  def initialize
+    @list = {}
+    @list["Entry"] = Room.new("Entry", "There is a door in front of you", false)
+  end
+  def add(room)
+    @list[room.name] = room
+  end
+end
+rooms = Rooms.new()
+
+location = rooms.find("Entry")
+
+Rooms.add(Room.new("Foyer", "in the foyer, kitchen is west, living room is north", false))
+Rooms.add(Room.new("Dining Room", "in what was once a formal dining room, a grue pulls you, screaming, under the table.  You are dead", true))
+Rooms.add(Room.new("Kitchen", "in the kitchen you are forever enslaved...", true))
+Rooms.add(Room.new("Living Room", "to the north is a door..", false))
+Rooms.add(Room.new("Back yard", "enjoy life in the hammock...", true))
+Rooms.find("Foyer").route_add(Rooms.find("Living Room"), "N")
+Rooms.find("Foyer").route_add(Rooms.find("Dining Room"), "W")
+Rooms.find("Living Room").route_add(Rooms.find("Kitchen"), "W")
+Rooms.find("Living Room").route_add(Rooms.find("Back yard"), "N")
+
+location.add_route("N", Room.new("Foyer", "in the foyer, kitchen is west, living room is north", false))
+
+while ! location.game_ending?
+  location.describe()
+  command = get_command()
+  case command
+  when "N", "E", "W", "S", "U", "D"
+    if new_location = location.move(command)
+      location = new_location
+      # whatever to tell them the move was successful
+      #
+    else 
+      # whatever to do when the move failedc
+    end
+  else
+    # print "invalid command" message
+  end
+end
+  location.describe()
+
+def get_command()
+  puts "What will you do now? "
+  gets command
+  return command
+end
