@@ -14,3 +14,7 @@ get '/hello/' do
           erb :index, :locals => {'greeting' => greeting}
 end
 
+get '/goodbye/' do
+            erb :index, :locals => {'greeting' => "piss off"}
+            end
+
