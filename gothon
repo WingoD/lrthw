@@ -50,7 +50,7 @@ while ! location.game_ending?
       # whatever to tell them the move was successful
       #
     else 
-      # whatever to do when the move failedc
+      # whatever to do when the move failed
     end
   else
     # print "invalid command" message
