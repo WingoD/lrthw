@@ -1,65 +1,93 @@
 #!/usr/bin/env ruby
 
 class Room
+  def initialize(name, description, game_ending)
+    @name = name
+    @description = description
+    @game_ending = game_ending
+    @routes = {}
+  end
+
   attr_reader :description
+
+  def name
+    @name
+  end
+
   def describe
-    puts @description
+    @description
   end
 
   def game_ending?
-    return @game_ending
+    @game_ending
+  end
+
+  def route_add(room, direction)
+    @routes[direction] = room
   end
 
   def move(direction)
-    raise "not yet implemented"
+    if new_room = @routes[direction]
+      return new_room
+    else
+      return false
+    end
   end
 end
 
 class Rooms
+
   def initialize
     @list = {}
     @list["Entry"] = Room.new("Entry", "There is a door in front of you", false)
   end
+
   def add(room)
     @list[room.name] = room
   end
-end
-rooms = Rooms.new()
 
-location = rooms.find("Entry")
-
-Rooms.add(Room.new("Foyer", "in the foyer, kitchen is west, living room is north", false))
-Rooms.add(Room.new("Dining Room", "in what was once a formal dining room, a grue pulls you, screaming, under the table.  You are dead", true))
-Rooms.add(Room.new("Kitchen", "in the kitchen you are forever enslaved...", true))
-Rooms.add(Room.new("Living Room", "to the north is a door..", false))
-Rooms.add(Room.new("Back yard", "enjoy life in the hammock...", true))
-Rooms.find("Foyer").route_add(Rooms.find("Living Room"), "N")
-Rooms.find("Foyer").route_add(Rooms.find("Dining Room"), "W")
-Rooms.find("Living Room").route_add(Rooms.find("Kitchen"), "W")
-Rooms.find("Living Room").route_add(Rooms.find("Back yard"), "N")
-
-location.add_route("N", Room.new("Foyer", "in the foyer, kitchen is west, living room is north", false))
-
-while ! location.game_ending?
-  location.describe()
-  command = get_command()
-  case command
-  when "N", "E", "W", "S", "U", "D"
-    if new_location = location.move(command)
-      location = new_location
-      # whatever to tell them the move was successful
-      #
-    else 
-      # whatever to do when the move failed
-    end
-  else
-    # print "invalid command" message
+  def find(room)
+    @list[room]
   end
 end
-  location.describe()
 
 def get_command()
   puts "What will you do now? "
-  gets command
+  command = gets.chomp 
   return command
 end
+
+rooms = Rooms.new()
+
+rooms.add(Room.new("Foyer", "In the foyer, dining room is west, living room is north", false))
+rooms.add(Room.new("Dining Room", "In what was once a formal dining room, a grue pulls you, screaming, under the table.  You are dead", true))
+rooms.add(Room.new("Living Room", "To the north is a door and to the west is the kitchen.", false))
+rooms.add(Room.new("Kitchen", "In the kitchen you are forever enslaved...", true))
+rooms.add(Room.new("Back yard", "Enjoy life in the hammock...", true))
+
+rooms.find("Entry").route_add(rooms.find("Foyer"), "N")
+rooms.find("Foyer").route_add(rooms.find("Living Room"), "N")
+rooms.find("Foyer").route_add(rooms.find("Dining Room"), "W")
+rooms.find("Living Room").route_add(rooms.find("Back yard"), "N")
+rooms.find("Living Room").route_add(rooms.find("Kitchen"), "W")
+
+location = rooms.find("Entry")
+
+while ! location.game_ending?
+  puts "You are in the #{location.name.downcase}. #{location.describe}."
+  command = get_command
+
+  case command
+
+  when "N", "E", "W", "S", "U", "D"
+    if new_location = location.move(command)
+      location = new_location
+      puts "You moved into the #{location.name.downcase}."
+    else 
+      puts "You cant go that way."
+    end
+  else
+    puts "Error, do not know that direction."
+  end
+end
+puts location.describe
