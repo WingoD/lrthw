@@ -39,7 +39,7 @@ class Rooms
 
   def initialize
     @list = {}
-    @list["Entry"] = Room.new("Entry", "There is a door in front of you", false)
+    @list["Entry"] = Room.new("Entry", "There is a door in front of you to the North.", false)
   end
 
   def add(room)
@@ -59,9 +59,9 @@ end
 
 rooms = Rooms.new()
 
-rooms.add(Room.new("Foyer", "In the foyer, dining room is west, living room is north", false))
+rooms.add(Room.new("Foyer", "In the foyer, dining room is West, living room is North", false))
 rooms.add(Room.new("Dining Room", "In what was once a formal dining room, a grue pulls you, screaming, under the table.  You are dead", true))
-rooms.add(Room.new("Living Room", "To the north is a door and to the west is the kitchen.", false))
+rooms.add(Room.new("Living Room", "To the North is a door and to the West is the kitchen.", false))
 rooms.add(Room.new("Kitchen", "In the kitchen you are forever enslaved...", true))
 rooms.add(Room.new("Back yard", "Enjoy life in the hammock...", true))
 
